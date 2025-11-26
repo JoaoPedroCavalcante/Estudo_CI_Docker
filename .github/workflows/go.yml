@@ -31,16 +31,18 @@ jobs:
 
       - name: Wait for Postgres
         run: |
-          echo "Aguardando Postgres subir..."
+          echo "Aguardando Postgres subir (via pg_isready)..."
           for i in {1..15}; do
-            if nc -z localhost 5432; then
+            if docker compose exec -T postgres pg_isready -U root -d root >/dev/null 2>&1; then
               echo "Postgres está pronto!"
               exit 0
             fi
-            echo "Postgres não está pronto ainda... tentando novamente ($i)"
+            echo "Postgres ainda não está pronto... tentativa $i"
             sleep 2
           done
-          echo "Postgres não subiu a tempo."
+          echo "Postgres não ficou pronto a tempo. Mostrando status e logs:"
+          docker compose ps
+          docker compose logs postgres
           exit 1
 
       - name: Test
