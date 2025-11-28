@@ -8,6 +8,6 @@ ENV HOST=localhost PORT=5433
 
 ENV USER=root PASSWORD=root DBNAME=root
 
-COPY ./main.exe main
+COPY ./main main
 
-CMD [ "./main.exe" ]
+CMD [ "./main" ]
